@@ -1,3 +1,4 @@
+import { RankingTable } from "@/features/ranking";
 import { festivalHighlights } from "../data/festival-highlights";
 import styles from "./home-page.module.css";
 
@@ -38,6 +39,8 @@ export function HomePage() {
           ))}
         </div>
       </section>
+
+      <RankingTable />
     </main>
   );
 }
