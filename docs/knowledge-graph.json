@@ -1,0 +1,210 @@
+{
+  "project": {
+    "name": "Medieval Interactive Story",
+    "version": "1.0.0",
+    "description": "Interactive web application for medieval festivals where users explore a map and unlock story chapters throughout the event."
+  },
+  "domain": {
+    "type": "Interactive Event Platform",
+    "theme": "Medieval Fantasy",
+    "target": [
+      "Medieval fairs",
+      "Live roleplay events",
+      "Interactive experiences",
+      "Historical festivals"
+    ]
+  },
+  "techStack": {
+    "frontend": {
+      "framework": "Next.js",
+      "library": "React",
+      "language": "TypeScript",
+      "styling": [
+        "TailwindCSS"
+      ],
+      "animations": [
+        "Framer Motion"
+      ]
+    },
+    "backend": {
+      "runtime": "Node.js",
+      "framework": "Next.js API Routes / Server Actions"
+    },
+    "database": {
+      "engine": "MongoDB",
+      "orm": "Mongoose"
+    },
+    "authentication": {
+      "provider": "Google",
+      "library": "Auth.js (NextAuth)"
+    },
+    "storage": {
+      "images": "Cloudinary",
+      "videos": "Cloudinary / YouTube"
+    }
+  },
+  "authentication": {
+    "loginRequired": true,
+    "provider": "Google",
+    "roles": {
+      "USER": {
+        "permissions": [
+          "ViewMap",
+          "ViewUnlockedChapters",
+          "ViewImages",
+          "ViewVideos",
+          "ViewRanking"
+        ]
+      },
+      "ADMIN": {
+        "strategy": "Email Whitelist",
+        "env": "ADMIN_EMAIL",
+        "permissions": [
+          "ManageChapters",
+          "ManageUsers",
+          "AssignPoints",
+          "ActivateChapters",
+          "UploadMedia",
+          "ManageRanking"
+        ]
+      }
+    }
+  },
+  "modules": {
+    "public": [
+      "Interactive Map",
+      "Story Chapters",
+      "Media Viewer",
+      "Ranking",
+      "Profile"
+    ],
+    "admin": [
+      "Dashboard",
+      "Chapter CRUD",
+      "User Management",
+      "Point Management",
+      "Media Management"
+    ]
+  },
+  "navigation": {
+    "routes": [
+      "/",
+      "/chapter/[slug]",
+      "/ranking",
+      "/profile",
+      "/admin/dashboard",
+      "/admin/chapters",
+      "/admin/users"
+    ]
+  },
+  "chapter": {
+    "fields": [
+      "title",
+      "slug",
+      "chapterNumber",
+      "content",
+      "unlockAt",
+      "isPublished",
+      "isManuallyEnabled",
+      "images",
+      "videos",
+      "mapPosition"
+    ],
+    "unlockRules": {
+      "scheduled": true,
+      "manualActivation": true
+    }
+  },
+  "ranking": {
+    "enabled": true,
+    "display": {
+      "modal": true,
+      "page": true
+    },
+    "sorting": "totalPoints DESC",
+    "manualPoints": true,
+    "automaticPoints": true,
+    "automaticIdeas": [
+      "Open a chapter",
+      "Complete a mission",
+      "Scan QR codes",
+      "Attend activities",
+      "Answer trivia",
+      "Watch chapter videos",
+      "Daily login"
+    ]
+  },
+  "models": {
+    "User": {
+      "name": "string",
+      "email": "string",
+      "image": "string",
+      "totalPoints": "number"
+    },
+    "Chapter": {
+      "title": "string",
+      "slug": "string",
+      "content": "string",
+      "unlockAt": "Date",
+      "images": "Image[]",
+      "videos": "Video[]",
+      "mapPosition": {
+        "x": "number",
+        "y": "number"
+      }
+    },
+    "PointTransaction": {
+      "userId": "ObjectId",
+      "points": "number",
+      "type": [
+        "MANUAL",
+        "AUTOMATIC"
+      ],
+      "reason": "string",
+      "createdBy": "string",
+      "createdAt": "Date"
+    }
+  },
+  "ui": {
+    "theme": "Medieval",
+    "visualStyle": [
+      "Wood",
+      "Parchment",
+      "Red medieval buttons",
+      "Animated map",
+      "Interactive markers",
+      "Honor ranking"
+    ]
+  },
+  "futureFeatures": [
+    "Progress tracking",
+    "Achievements",
+    "Badges",
+    "QR missions",
+    "Push notifications",
+    "PWA",
+    "Offline mode",
+    "Music",
+    "Real-time ranking",
+    "Interactive NPCs",
+    "Guild system"
+  ],
+  "projectStructure": {
+    "app": [
+      "/",
+      "/chapter/[slug]",
+      "/ranking",
+      "/profile",
+      "/admin/dashboard",
+      "/admin/users",
+      "/admin/chapters"
+    ],
+    "components": [
+      "Map",
+      "Chapter",
+      "Ranking",
+      "Admin",
+      "UI"
+    ]
+  }
+}

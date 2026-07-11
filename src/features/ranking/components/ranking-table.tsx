@@ -1,11 +1,13 @@
-import { rankingEntries } from "../data/ranking-entries";
+import { getRankingEntries } from "../services/ranking-service";
 import styles from "./ranking-table.module.css";
 
 export function RankingTable() {
+  const rankingEntries = getRankingEntries();
+
   return (
     <section className={styles.section} id="ranking">
       <div className={styles.header}>
-        <p>Ranking inicial</p>
+        <p>Ranking dinamico</p>
         <h2>Tabla de posiciones</h2>
       </div>
 
@@ -21,7 +23,7 @@ export function RankingTable() {
           </thead>
           <tbody>
             {rankingEntries.map((entry) => (
-              <tr key={entry.position}>
+              <tr key={entry.userId}>
                 <td>
                   <span className={styles.position}>{entry.position}</span>
                 </td>
