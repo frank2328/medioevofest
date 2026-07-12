@@ -1,8 +1,31 @@
-import { getRankingEntries } from "../services/ranking-service";
+"use client";
+
+import { useEffect, useState } from "react";
+import type { RankingEntry } from "../data/ranking-entries";
+import { subscribeToRankingEntries } from "../services/ranking-service";
 import styles from "./ranking-table.module.css";
 
 export function RankingTable() {
-  const rankingEntries = getRankingEntries();
+  const [rankingEntries, setRankingEntries] = useState<RankingEntry[]>([]);
+  const [hasLoaded, setHasLoaded] = useState(false);
+
+  useEffect(() => {
+    return subscribeToRankingEntries(
+      (entries) => {
+        setRankingEntries(entries);
+        setHasLoaded(true);
+      },
+      (error) => {
+        console.error("No fue posible cargar el ranking desde Firebase.", error);
+        setRankingEntries([]);
+        setHasLoaded(true);
+      },
+    );
+  }, []);
+
+  if (!hasLoaded || rankingEntries.length === 0) {
+    return null;
+  }
 
   return (
     <section className={styles.section} id="ranking">
