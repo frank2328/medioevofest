@@ -1,12 +1,20 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import type { RankingEntry } from "../data/ranking-entries";
 import { addPoints } from "../services/points-service";
 import { subscribeToRankingEntries } from "../services/ranking-service";
 import styles from "./ranking-table.module.css";
+import { Button } from "@/shared/components/ui";
 
 const POINTS_PER_CLICK = 10;
+
+const podiumImages: Record<number, { src: string; alt: string }> = {
+  1: { src: "/images/first.png", alt: "Primer lugar" },
+  2: { src: "/images/second.png", alt: "Segundo lugar" },
+  3: { src: "/images/third.png", alt: "Tercer lugar" },
+};
 
 type Feedback = {
   type: "success" | "error";
@@ -36,26 +44,35 @@ export function RankingTable() {
     );
   }, []);
 
-  async function handleAddPoints(entry: RankingEntry) {
+  useEffect(() => {
+    setTimeout(() => {
+      setFeedback(null);
+    }, 5000)
+  }, [feedback]);
+
+  async function handleAddPoints(entry: RankingEntry, point: number) {
     setPendingUserId(entry.userId);
     setFeedback(null);
+
+    const isReduction = point < 0;
+    const pointAmount = Math.abs(point);
 
     try {
       const result = await addPoints({
         userId: entry.userId,
         participant: entry.participant,
         guild: entry.guild,
-        points: POINTS_PER_CLICK,
+        points: point,
         type: "MANUAL",
         reason: "ADMIN_ADJUSTMENT",
-        description: `Asignacion manual desde la tabla de ranking a ${entry.participant}`,
+        description: `${isReduction ? "Reduccion" : "Asignacion"} manual de ${pointAmount} puntos desde la tabla de ranking a ${entry.participant}`,
         createdBy: "ranking-table",
       });
 
       setFeedback({
         type: "success",
         message: result.added
-          ? `Se agregaron ${POINTS_PER_CLICK} puntos a ${entry.participant}.`
+          ? `Se ${isReduction ? "redujeron" : "agregaron"} ${pointAmount} puntos a ${entry.participant}.`
           : `La asignacion para ${entry.participant} ya estaba registrada.`,
       });
     } catch (error) {
@@ -86,7 +103,7 @@ export function RankingTable() {
               participant: "Participante 4",
               guild: "Gremio 4",
               score: 100
-            })}
+            }, POINTS_PER_CLICK)}
             type="button"
           >
             {pendingUserId === '4'
@@ -99,13 +116,12 @@ export function RankingTable() {
   }
 
   return (
-    <section className={styles.section} id="ranking">
-      <div className={styles.header}>
-        <p>Ranking dinamico</p>
+    <section className={`${styles.section} w-full flex flex-col justify-center `} id="ranking">
+      <div className={`${styles.header} w-full flex flex-row justify-center items-center`}>
         <h2>Tabla de posiciones</h2>
       </div>
 
-      <div className="flex flex-row w-full justify-center items-center h-50">
+      <div className="flex flex-row w-full justify-center items-center h-30">
         <div>
           <h1>No hay datos disponibles.</h1>
           <button
@@ -117,7 +133,7 @@ export function RankingTable() {
               participant: "Participante 4",
               guild: "Gremio 4",
               score: 100
-            })}
+            }, POINTS_PER_CLICK)}
             type="button"
           >
             {pendingUserId === '4'
@@ -144,31 +160,42 @@ export function RankingTable() {
             <tr>
               <th scope="col">Puesto</th>
               <th scope="col">Participante</th>
-              <th scope="col">Categoria</th>
+              {/* <th scope="col">Categoria</th> */}
               <th scope="col">Puntos</th>
-              <th scope="col">Accion</th>
+              <th scope="col">Adicionar Puntos</th>
+              <th scope="col">Reducir Puntos</th>
             </tr>
           </thead>
           <tbody>
             {rankingEntries.map((entry) => (
               <tr key={entry.userId}>
                 <td>
-                  <span className={styles.position}>{entry.position}</span>
+                  {podiumImages[entry.position] ? (
+                    <Image
+                      alt={podiumImages[entry.position].alt}
+                      className={styles.podiumImage}
+                      height={48}
+                      src={podiumImages[entry.position].src}
+                      width={48}
+                    />
+                  ) : (
+                    <span className={`${styles.position} text-[24px]`}>
+                      {entry.position}
+                    </span>
+                  )}
                 </td>
                 <td>{entry.participant}</td>
-                <td>{entry.guild}</td>
-                <td className={styles.score}>{entry.score}</td>
+                {/* <td>{entry.guild}</td> */}
+                <td className="text-[24px]">{entry.score}</td>
                 <td>
-                  <button
-                    className={styles.addPointsButton}
-                    disabled={pendingUserId !== null}
-                    onClick={() => handleAddPoints(entry)}
-                    type="button"
-                  >
-                    {pendingUserId === entry.userId
-                      ? "Registrando..."
-                      : `Agregar ${POINTS_PER_CLICK}`}
-                  </button>
+                  <Button onClick={() => handleAddPoints(entry, 3)} variant="secondary" size="small">+3</Button>
+                  <Button onClick={() => handleAddPoints(entry, 2)} variant="secondary" size="small">+2</Button>
+                  <Button onClick={() => handleAddPoints(entry, 1)} variant="secondary" size="small">+1</Button>
+                </td>
+                <td>
+                  <Button onClick={() => handleAddPoints(entry, -3)} variant="danger" size="small">-3</Button>
+                  <Button onClick={() => handleAddPoints(entry, -2)} variant="danger" size="small">-2</Button>
+                  <Button onClick={() => handleAddPoints(entry, -1)} variant="danger" size="small">-1</Button>
                 </td>
               </tr>
             ))}

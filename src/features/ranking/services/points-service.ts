@@ -101,8 +101,6 @@ export async function addPoints(input: AddPointsInput): Promise<AddPointsResult>
   const result = await runTransaction(ref(realtimeDatabase), (currentValue) => {
     const database = (currentValue ?? {}) as DatabaseRoot;
     const pointTransactions = database.pointTransactions ?? {};
-    console.log('pointTransactionUniqueKeys', database.pointTransactions);
-    
 
     if (uniqueIndexKey) {
       const existingTransactionId =

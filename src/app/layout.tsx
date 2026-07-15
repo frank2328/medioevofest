@@ -1,6 +1,18 @@
 import type { Metadata } from "next";
+import { Cinzel, Cormorant_Garamond } from "next/font/google";
 import { FirebaseAnalytics } from "./firebase-analytics";
 import "./globals.css";
+
+const displayFont = Cinzel({
+  subsets: ["latin"],
+  variable: "--font-display",
+});
+
+const bodyFont = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-body",
+  weight: ["400", "500", "600", "700"],
+});
 
 export const metadata: Metadata = {
   title: "Medioevofest",
@@ -13,7 +25,7 @@ type RootLayoutProps = Readonly<{
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="es">
+    <html lang="es" className={`${displayFont.variable} ${bodyFont.variable}`}>
       <body>
         {children}
         <FirebaseAnalytics />

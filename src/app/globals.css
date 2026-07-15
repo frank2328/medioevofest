@@ -2,14 +2,74 @@
 
 :root {
   color-scheme: dark;
-  --background: #12100d;
-  --foreground: #f8efe2;
-  --muted: #c7b8a2;
-  --panel: #1c1813;
-  --panel-border: #393126;
-  --accent: #cf3f2f;
-  --accent-strong: #f0b34d;
-  --ink: #12100d;
+
+  /* Color primitives */
+  --color-void: #100d0a;
+  --color-wood: #1b1510;
+  --color-leather: #2a1d15;
+  --color-parchment: #ead8b7;
+  --color-ivory: #fff4df;
+  --color-gold: #d8a84e;
+  --color-gold-bright: #f0c66a;
+  --color-crimson: #9f2f2a;
+  --color-crimson-bright: #c54538;
+  --color-moss: #536442;
+  --color-steel: #80909a;
+  --color-success: #73b883;
+  --color-danger: #e07870;
+
+  /* Semantic colors */
+  --color-bg: var(--color-void);
+  --color-surface: var(--color-wood);
+  --color-surface-raised: var(--color-leather);
+  --color-text: var(--color-ivory);
+  --color-text-muted: #cbbda7;
+  --color-border: #49392a;
+  --color-border-strong: #725733;
+  --color-accent: var(--color-gold);
+  --color-accent-hover: var(--color-gold-bright);
+  --color-action: var(--color-crimson);
+  --color-action-hover: var(--color-crimson-bright);
+  --color-focus: var(--color-gold-bright);
+
+  /* Typography */
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-display), Georgia, serif;
+  --font-copy: var(--font-body), Georgia, serif;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: clamp(1.875rem, 4vw, 3.5rem);
+
+  /* Spacing and shape */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-round: 999px;
+  --shadow-raised: 0 16px 40px rgb(0 0 0 / 0.28);
+  --transition-fast: 160ms ease;
+  --content-width: 1200px;
+
+  /* Backwards-compatible aliases */
+  --background: var(--color-bg);
+  --foreground: var(--color-text);
+  --muted: var(--color-text-muted);
+  --panel: var(--color-surface);
+  --panel-border: var(--color-border);
+  --accent: var(--color-action-hover);
+  --accent-strong: var(--color-accent-hover);
+  --ink: var(--color-void);
 }
 
 * {
@@ -29,10 +89,21 @@ body {
     linear-gradient(315deg, rgba(240, 179, 77, 0.12), transparent 34%),
     var(--background);
   color: var(--foreground);
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
+  font-family: var(--font-copy);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: 0.015em;
 }
 
 a {
@@ -45,4 +116,25 @@ input,
 textarea,
 select {
   font: inherit;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-void);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
