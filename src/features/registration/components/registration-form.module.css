@@ -1,0 +1,61 @@
+.form {
+  padding: clamp(24px, 5vw, 48px);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(145deg, rgb(240 198 106 / 0.06), transparent 42%),
+    var(--color-surface);
+  box-shadow: var(--shadow-raised);
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6);
+}
+
+.field { display: flex; flex-direction: column; }
+.field label {
+  margin-bottom: var(--space-2);
+  color: var(--color-gold-bright);
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.field input {
+  width: 100%;
+  min-height: 50px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0 var(--space-4);
+  background: rgb(16 13 10 / 0.72);
+  color: var(--color-text);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.field input:hover { border-color: var(--color-border-strong); }
+.field input:focus { border-color: var(--color-gold); box-shadow: 0 0 0 3px rgb(216 168 78 / 0.12); outline: none; }
+.field input[aria-invalid="true"] { border-color: var(--color-danger); }
+
+.error { margin: var(--space-2) 0 0; color: var(--color-danger); font-size: var(--text-sm); }
+.submit {
+  width: 100%;
+  min-height: 52px;
+  margin-top: var(--space-8);
+  border: 1px solid var(--color-gold-bright);
+  border-radius: var(--radius-md);
+  background: var(--color-action);
+  color: var(--color-ivory);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+.submit:hover:not(:disabled) { background: var(--color-action-hover); transform: translateY(-1px); }
+.submit:disabled { cursor: wait; opacity: 0.65; }
+.submitError { margin: var(--space-5) 0 0; border: 1px solid rgb(224 120 112 / 0.6); padding: var(--space-3) var(--space-4); background: rgb(224 120 112 / 0.1); color: #f1b1ab; text-align: center; }
+.success { margin: var(--space-5) 0 0; border: 1px solid rgb(115 184 131 / 0.55); padding: var(--space-3) var(--space-4); background: rgb(115 184 131 / 0.1); color: #b9dfc1; text-align: center; }
+
+@media (max-width: 640px) { .fields { grid-template-columns: 1fr; gap: var(--space-5); } }
