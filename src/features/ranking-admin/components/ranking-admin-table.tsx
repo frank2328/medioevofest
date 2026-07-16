@@ -3,10 +3,11 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { getAssetPath } from "@/lib/get-asset-path";
-import type { RankingEntry } from "../data/ranking-entries";
-import { addPoints } from "../services/points-service";
-import { subscribeToRankingEntries } from "../services/ranking-service";
-import styles from "./ranking-table.module.css";
+import { Button } from "@/shared/components/ui";
+import type { RankingAdminEntry } from "../data/ranking-admin-entries";
+import { addPoints } from "../services/ranking-admin-points-service";
+import { subscribeToRankingAdminEntries } from "../services/ranking-admin-service";
+import styles from "./ranking-admin-table.module.css";
 
 const POINTS_PER_CLICK = 10;
 
@@ -21,14 +22,14 @@ type Feedback = {
   message: string;
 };
 
-export function RankingTable() {
-  const [rankingEntries, setRankingEntries] = useState<RankingEntry[]>([]);
+export function RankingAdminTable() {
+  const [rankingEntries, setRankingEntries] = useState<RankingAdminEntry[]>([]);
   const [hasLoaded, setHasLoaded] = useState(false);
   const [pendingUserId, setPendingUserId] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
 
   useEffect(() => {
-    return subscribeToRankingEntries(
+    return subscribeToRankingAdminEntries(
       (entries) => {
         setRankingEntries(entries);
         setHasLoaded(true);
@@ -50,7 +51,7 @@ export function RankingTable() {
     }, 5000)
   }, [feedback]);
 
-  async function handleAddPoints(entry: RankingEntry, point: number) {
+  async function handleAddPoints(entry: RankingAdminEntry, point: number) {
     setPendingUserId(entry.userId);
     setFeedback(null);
 
@@ -66,7 +67,7 @@ export function RankingTable() {
         type: "MANUAL",
         reason: "ADMIN_ADJUSTMENT",
         description: `${isReduction ? "Reduccion" : "Asignacion"} manual de ${pointAmount} puntos desde la tabla de ranking a ${entry.participant}`,
-        createdBy: "ranking-table",
+        createdBy: "ranking-admin-table",
       });
 
       setFeedback({
@@ -116,7 +117,7 @@ export function RankingTable() {
   }
 
   return (
-    <section className={`${styles.section} w-full flex flex-col justify-center `} id="ranking">
+    <section className={`${styles.section} w-full flex flex-col justify-center `} id="ranking-admin">
       <div className={`${styles.header} w-full flex flex-row justify-center items-center`}>
         <h2>Tabla de posiciones</h2>
       </div>
@@ -140,6 +141,8 @@ export function RankingTable() {
               <th scope="col">Participante</th>
               {/* <th scope="col">Categoria</th> */}
               <th scope="col">Puntos</th>
+              <th scope="col">Adicionar Puntos</th>
+              <th scope="col">Reducir Puntos</th>
             </tr>
           </thead>
           <tbody>
@@ -162,7 +165,17 @@ export function RankingTable() {
                 </td>
                 <td>{entry.participant}</td>
                 {/* <td>{entry.guild}</td> */}
-                <td className={styles.score}>{entry.score}</td>
+                <td className="text-[24px]">{entry.score}</td>
+                <td>
+                  <Button onClick={() => handleAddPoints(entry, 3)} variant="secondary" size="small">+3</Button>
+                  <Button onClick={() => handleAddPoints(entry, 2)} variant="secondary" size="small">+2</Button>
+                  <Button onClick={() => handleAddPoints(entry, 1)} variant="secondary" size="small">+1</Button>
+                </td>
+                <td>
+                  <Button onClick={() => handleAddPoints(entry, -3)} variant="danger" size="small">-3</Button>
+                  <Button onClick={() => handleAddPoints(entry, -2)} variant="danger" size="small">-2</Button>
+                  <Button onClick={() => handleAddPoints(entry, -1)} variant="danger" size="small">-1</Button>
+                </td>
               </tr>
             ))}
           </tbody>

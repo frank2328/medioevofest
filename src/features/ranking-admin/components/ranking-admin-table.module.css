@@ -24,8 +24,6 @@
 
 .tableWrap {
   overflow-x: auto;
-  overflow-y: auto;
-  max-height: 760px;
   border: 1px solid var(--panel-border);
   border-radius: 8px;
   background: var(--panel);
@@ -45,10 +43,6 @@
 }
 
 .table th {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background: var(--panel);
   color: var(--muted);
   font-size: 0.78rem;
   font-weight: 700;
@@ -88,7 +82,6 @@
 
 .score {
   color: var(--accent-strong);
-  font-size: 24px;
   font-weight: 800;
 }
 
@@ -141,46 +134,5 @@
 @media (max-width: 760px) {
   .section {
     padding-top: 44px;
-  }
-
-  .tableWrap {
-    overflow-x: hidden;
-    max-height: 722px;
-  }
-
-  .table {
-    min-width: 0;
-    table-layout: fixed;
-  }
-
-  .table th,
-  .table td {
-    padding: 14px 10px;
-  }
-
-  .table th:nth-child(1),
-  .table td:nth-child(1) {
-    width: 24%;
-  }
-
-  .table th:nth-child(2),
-  .table td:nth-child(2) {
-    width: 51%;
-  }
-
-  .table th:nth-child(3),
-  .table td:nth-child(3) {
-    width: 25%;
-    text-align: center;
-  }
-
-  .table td:nth-child(2) {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .score {
-    font-size: 20px;
   }
 }
