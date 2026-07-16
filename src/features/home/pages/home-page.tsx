@@ -14,6 +14,9 @@ export function HomePage() {
             comunidad en una nueva marca festivalera.
           </p>
           <div className={styles.actions}>
+            <a className={styles.primaryAction} href="/registro">
+              Inscribirme
+            </a>
             <a className={styles.primaryAction} href="#programacion">
               Ver programacion
             </a>
