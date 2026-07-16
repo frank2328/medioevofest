@@ -1,0 +1,205 @@
+{
+  "project": {
+    "name": "medioevofest",
+    "framework": "Next.js",
+    "router": "App Router",
+    "deployment": "GitHub Pages",
+    "repositoryName": "medioevofest",
+    "publicBasePath": "/medioevofest"
+  },
+  "problem": {
+    "title": "Imágenes rotas en GitHub Pages",
+    "description": "En desarrollo local las imágenes funcionan, pero al desplegar en GitHub Pages aparecen rotas porque las rutas que comienzan con '/' apuntan a la raíz del dominio y no a la subruta '/medioevofest'.",
+    "incorrectResolutionExample": {
+      "imageSource": "/images/ranking/primer-puesto.png",
+      "browserRequests": "https://USUARIO.github.io/images/ranking/primer-puesto.png",
+      "expected": "https://USUARIO.github.io/medioevofest/images/ranking/primer-puesto.png"
+    }
+  },
+  "nextConfig": {
+    "file": "next.config.ts",
+    "recommendedCode": [
+      "import type { NextConfig } from \"next\";",
+      "",
+      "const isGitHubPages = process.env.GITHUB_ACTIONS === \"true\";",
+      "const repositoryName = \"medioevofest\";",
+      "",
+      "const nextConfig: NextConfig = {",
+      "  output: \"export\",",
+      "  basePath: isGitHubPages ? `/${repositoryName}` : \"\",",
+      "  assetPrefix: isGitHubPages ? `/${repositoryName}/` : \"\",",
+      "  trailingSlash: true,",
+      "  images: {",
+      "    unoptimized: true,",
+      "  },",
+      "};",
+      "",
+      "export default nextConfig;"
+    ],
+    "notes": [
+      "output: export genera la carpeta out para GitHub Pages.",
+      "basePath agrega /medioevofest a las rutas internas durante el build de GitHub Actions.",
+      "assetPrefix configura la ubicación de los recursos generados por Next.js.",
+      "images.unoptimized es necesario porque GitHub Pages no ejecuta el optimizador de imágenes de Next.js."
+    ]
+  },
+  "assetPathHelper": {
+    "file": "src/lib/getAssetPath.ts",
+    "purpose": "Crear rutas de recursos que funcionen tanto en localhost como bajo la subruta /medioevofest de GitHub Pages.",
+    "recommendedCode": [
+      "const BASE_PATH = process.env.NODE_ENV === \"production\" ? \"/medioevofest\" : \"\";",
+      "",
+      "export function getAssetPath(path: string): string {",
+      "  const normalizedPath = path.startsWith(\"/\") ? path : `/${path}`;",
+      "  return `${BASE_PATH}${normalizedPath}`;",
+      "}"
+    ],
+    "preferredAlternative": {
+      "description": "Para evitar que cualquier build local de producción agregue el prefijo, se puede exponer una variable NEXT_PUBLIC_BASE_PATH desde GitHub Actions.",
+      "helperCode": [
+        "const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? \"\";",
+        "",
+        "export function getAssetPath(path: string): string {",
+        "  const normalizedPath = path.startsWith(\"/\") ? path : `/${path}`;",
+        "  return `${BASE_PATH}${normalizedPath}`;",
+        "}"
+      ],
+      "githubActionsEnv": {
+        "NEXT_PUBLIC_BASE_PATH": "/medioevofest"
+      }
+    }
+  },
+  "publicDirectory": {
+    "requiredStructure": [
+      "public/",
+      "  images/",
+      "    ranking/",
+      "      primer-puesto.png",
+      "      segundo-puesto.png",
+      "      tercer-puesto.png"
+    ],
+    "rules": [
+      "Las imágenes estáticas deben estar dentro de public.",
+      "No se debe escribir public dentro de la URL.",
+      "Los nombres y extensiones deben coincidir exactamente.",
+      "GitHub Pages distingue mayúsculas y minúsculas.",
+      "Evitar espacios, tildes y caracteres especiales en nombres de archivos.",
+      "Preferir nombres en minúsculas separados por guiones."
+    ]
+  },
+  "usageExamples": {
+    "htmlImg": {
+      "before": [
+        "<img src=\"/images/ranking/primer-puesto.png\" alt=\"Primer puesto\" />"
+      ],
+      "after": [
+        "import { getAssetPath } from \"@/lib/getAssetPath\";",
+        "",
+        "<img",
+        "  src={getAssetPath(\"/images/ranking/primer-puesto.png\")}",
+        "  alt=\"Primer puesto\"",
+        "/>"
+      ]
+    },
+    "nextImage": {
+      "code": [
+        "import Image from \"next/image\";",
+        "import { getAssetPath } from \"@/lib/getAssetPath\";",
+        "",
+        "<Image",
+        "  src={getAssetPath(\"/images/ranking/primer-puesto.png\")}",
+        "  alt=\"Primer puesto\"",
+        "  width={60}",
+        "  height={60}",
+        "/>"
+      ],
+      "note": "Mantener images.unoptimized = true en next.config.ts."
+    },
+    "dataArray": {
+      "code": [
+        "import { getAssetPath } from \"@/lib/getAssetPath\";",
+        "",
+        "const positions = [",
+        "  {",
+        "    position: \"Primer\",",
+        "    image: getAssetPath(\"/images/ranking/primer-puesto.png\"),",
+        "  },",
+        "  {",
+        "    position: \"Segundo\",",
+        "    image: getAssetPath(\"/images/ranking/segundo-puesto.png\"),",
+        "  },",
+        "  {",
+        "    position: \"Tercer\",",
+        "    image: getAssetPath(\"/images/ranking/tercer-puesto.png\"),",
+        "  },",
+        "];"
+      ]
+    },
+    "cssBackground": {
+      "warning": "Las rutas dentro de archivos CSS no pueden llamar funciones TypeScript. Para fondos dinámicos, usar style en JSX o una variable CSS.",
+      "jsxExample": [
+        "<div",
+        "  style={{",
+        "    backgroundImage: `url(${getAssetPath(\"/images/backgrounds/castle.webp\")})`,",
+        "  }}",
+        "/>"
+      ]
+    }
+  },
+  "codexTasks": [
+    {
+      "id": "audit-image-paths",
+      "instruction": "Buscar en src todos los usos de src=\"/..., src={'/...'}, url('/...') y url(\"/...\") que apunten a imágenes o recursos de public."
+    },
+    {
+      "id": "create-helper",
+      "instruction": "Crear src/lib/getAssetPath.ts y centralizar allí el prefijo de GitHub Pages."
+    },
+    {
+      "id": "replace-image-paths",
+      "instruction": "Actualizar img, next/image, arrays de configuración y estilos JSX para usar getAssetPath en todos los recursos locales de public."
+    },
+    {
+      "id": "preserve-external-urls",
+      "instruction": "No modificar URLs absolutas que empiecen por https://, http://, data: o blob:."
+    },
+    {
+      "id": "verify-case",
+      "instruction": "Comprobar que cada ruta coincide exactamente con el nombre real del archivo, incluyendo mayúsculas, minúsculas y extensión."
+    },
+    {
+      "id": "build-test",
+      "instruction": "Ejecutar npm run build y verificar que se genere out sin errores."
+    }
+  ],
+  "validation": {
+    "local": [
+      "npm run build",
+      "npx serve out",
+      "Abrir http://localhost:3000",
+      "Confirmar que no existan respuestas 404 para imágenes ni archivos de _next."
+    ],
+    "githubPages": [
+      "Hacer commit y push a main.",
+      "Esperar que GitHub Actions termine correctamente.",
+      "Abrir https://USUARIO.github.io/medioevofest/.",
+      "Probar directamente una imagen en https://USUARIO.github.io/medioevofest/images/ranking/primer-puesto.png.",
+      "Recargar con Ctrl + F5 para evitar caché antigua."
+    ],
+    "browserDevTools": [
+      "Abrir Network.",
+      "Filtrar por Img.",
+      "Una ruta correcta debe comenzar por /medioevofest/.",
+      "Una solicitud a /images/... sin /medioevofest indica que falta aplicar el helper."
+    ]
+  },
+  "acceptanceCriteria": [
+    "Todas las imágenes locales cargan en localhost.",
+    "Todas las imágenes locales cargan en GitHub Pages.",
+    "No hay solicitudes 404 a /images, /icons, /assets o recursos equivalentes.",
+    "No se modifican URLs externas.",
+    "Las rutas son resistentes a diferencias entre Windows y Linux.",
+    "El proyecto continúa generando correctamente la carpeta out."
+  ],
+  "promptForCodex": "Usa este archivo como contexto. Corrige las rutas de imágenes y recursos estáticos del proyecto Next.js desplegado en GitHub Pages bajo /medioevofest. Audita el proyecto, crea un helper centralizado getAssetPath, reemplaza las rutas absolutas locales y valida el build. No cambies URLs externas ni la lógica funcional de los componentes."
+}

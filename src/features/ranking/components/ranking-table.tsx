@@ -2,18 +2,19 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { getAssetPath } from "@/lib/get-asset-path";
+import { Button } from "@/shared/components/ui";
 import type { RankingEntry } from "../data/ranking-entries";
 import { addPoints } from "../services/points-service";
 import { subscribeToRankingEntries } from "../services/ranking-service";
 import styles from "./ranking-table.module.css";
-import { Button } from "@/shared/components/ui";
 
 const POINTS_PER_CLICK = 10;
 
 const podiumImages: Record<number, { src: string; alt: string }> = {
-  1: { src: "/images/first.png", alt: "Primer lugar" },
-  2: { src: "/images/second.png", alt: "Segundo lugar" },
-  3: { src: "/images/third.png", alt: "Tercer lugar" },
+  1: { src: getAssetPath("/images/first.png"), alt: "Primer lugar" },
+  2: { src: getAssetPath("/images/second.png"), alt: "Segundo lugar" },
+  3: { src: getAssetPath("/images/third.png"), alt: "Tercer lugar" },
 };
 
 type Feedback = {
@@ -119,28 +120,6 @@ export function RankingTable() {
     <section className={`${styles.section} w-full flex flex-col justify-center `} id="ranking">
       <div className={`${styles.header} w-full flex flex-row justify-center items-center`}>
         <h2>Tabla de posiciones</h2>
-      </div>
-
-      <div className="flex flex-row w-full justify-center items-center h-30">
-        <div>
-          <h1>No hay datos disponibles.</h1>
-          <button
-            className={styles.addPointsButton}
-            disabled={pendingUserId !== null}
-            onClick={() => handleAddPoints({
-              position: 4,
-              userId: "4",
-              participant: "Participante 4",
-              guild: "Gremio 4",
-              score: 100
-            }, POINTS_PER_CLICK)}
-            type="button"
-          >
-            {pendingUserId === '4'
-              ? "Registrando..."
-              : `Agregar Participante`}
-          </button>
-        </div>
       </div>
 
       {feedback && (
