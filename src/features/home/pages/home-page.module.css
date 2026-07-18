@@ -1,134 +1,17 @@
 .page {
+  display: grid;
   min-height: 100vh;
+  place-items: center;
+  padding: 32px 20px;
+  text-align: center;
 }
 
-.hero {
-  display: grid;
-  min-height: 72vh;
-  align-items: center;
-  padding: 48px clamp(20px, 6vw, 88px);
-}
-
-.heroContent {
-  max-width: 760px;
-}
-
-.kicker {
-  margin: 0 0 14px;
+.message {
+  max-width: 900px;
+  margin: 0;
   color: var(--accent-strong);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0;
-  text-transform: uppercase;
-}
-
-.hero h1 {
-  margin: 0;
-  font-size: clamp(3.4rem, 12vw, 8.5rem);
-  line-height: 0.92;
-}
-
-.lead {
-  max-width: 620px;
-  margin: 28px 0 0;
-  color: var(--muted);
-  font-size: clamp(1.05rem, 2vw, 1.35rem);
-  line-height: 1.55;
-}
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 34px;
-}
-
-.primaryAction,
-.secondaryAction {
-  display: inline-flex;
-  min-height: 46px;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  padding: 0 18px;
-  font-weight: 700;
-}
-
-.primaryAction {
-  background: var(--accent-strong);
-  color: var(--ink);
-}
-
-.secondaryAction {
-  border-color: var(--panel-border);
-  color: var(--foreground);
-}
-
-.contentBand {
-  padding: 56px clamp(20px, 6vw, 88px) 72px;
-  background: rgba(18, 16, 13, 0.72);
-  border-top: 1px solid var(--panel-border);
-}
-
-.sectionHeader {
-  max-width: 720px;
-}
-
-.sectionHeader h2 {
-  margin: 0;
-  font-size: clamp(2rem, 5vw, 4rem);
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 8vw, 6.5rem);
   line-height: 1;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-  margin-top: 34px;
-}
-
-.card {
-  min-height: 220px;
-  border: 1px solid var(--panel-border);
-  border-radius: 8px;
-  padding: 22px;
-  background: var(--panel);
-}
-
-.card span {
-  color: var(--accent-strong);
-  font-size: 0.8rem;
-  font-weight: 700;
-}
-
-.card h3 {
-  margin: 18px 0 10px;
-  font-size: 1.35rem;
-}
-
-.card p {
-  margin: 0;
-  color: var(--muted);
-  line-height: 1.55;
-}
-
-@media (max-width: 760px) {
-  .hero {
-    min-height: 66vh;
-    padding-top: 36px;
-  }
-
-  .actions {
-    flex-direction: column;
-  }
-
-  .primaryAction,
-  .secondaryAction {
-    width: 100%;
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
-  }
+  text-wrap: balance;
 }

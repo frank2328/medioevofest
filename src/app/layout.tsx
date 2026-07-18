@@ -17,6 +17,9 @@ const bodyFont = Cormorant_Garamond({
 export const metadata: Metadata = {
   title: "Medioevofest",
   description: "Festival medieval en Cucuta, Colombia.",
+  icons: {
+    icon: "/medioevofest_favicon.ico",
+  },
 };
 
 type RootLayoutProps = Readonly<{
