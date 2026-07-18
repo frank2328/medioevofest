@@ -38,7 +38,6 @@ export function subscribeToRankingAdminEntries(
       const entries = records
         .filter(isRankingAdminRecord)
         .sort((firstEntry, secondEntry) => secondEntry.score - firstEntry.score)
-        .slice(0, limit)
         .map((entry, index) => ({
           ...entry,
           position: index + 1,
