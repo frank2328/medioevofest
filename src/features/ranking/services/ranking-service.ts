@@ -38,7 +38,6 @@ export function subscribeToRankingEntries(
       const entries = records
         .filter(isRankingRecord)
         .sort((firstEntry, secondEntry) => secondEntry.score - firstEntry.score)
-        .slice(0, limit)
         .map((entry, index) => ({
           ...entry,
           position: index + 1,
