@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   title: "Medioevofest",
   description: "Festival medieval en Cucuta, Colombia.",
   icons: {
-    icon: "/medioevofest_favicon.ico",
+    icon: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/medioevofest_favicon.ico`,
   },
 };
 
